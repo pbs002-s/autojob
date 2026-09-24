@@ -1,0 +1,75 @@
+{
+  "general": {
+    "app_name": "AutoJob AI",
+    "version": "1.0.0",
+    "log_level": "INFO",
+    "database_path": "data/autojob.db"
+  },
+  "llm": {
+    "provider": "gemini",
+    "model": "gemini-2.5-flash",
+    "api_key_env": "GEMINI_API_KEY",
+    "temperature": 0.4
+  },
+  "browser": {
+    "headless": false,
+    "user_data_dir": "data/browser_profile",
+    "slow_mo_ms": 75,
+    "viewport": {
+      "width": 1280,
+      "height": 800
+    },
+    "stealth_mode": true
+  },
+  "scout": {
+    "check_interval_minutes": 30,
+    "min_match_score_to_apply": 80,
+    "keywords": [
+      "Full Stack Developer",
+      "React Next.js",
+      "Python Automation",
+      "Web Scraping Playwright",
+      "AI Engineer"
+    ],
+    "platforms": {
+      "remoteok": {
+        "enabled": true,
+        "tags": ["engineer", "python", "react", "remote"]
+      },
+      "weworkremotely": {
+        "enabled": true,
+        "categories": ["full-stack-programming", "back-end-programming"]
+      },
+      "linkedin": {
+        "enabled": false,
+        "easy_apply_only": true,
+        "max_applicants": 20
+      },
+      "upwork": {
+        "enabled": false,
+        "min_client_rating": 4.5,
+        "min_client_spend_usd": 1000
+      }
+    }
+  },
+  "responder": {
+    "enabled": true,
+    "check_interval_seconds": 60,
+    "human_delay_seconds_min": 45,
+    "human_delay_seconds_max": 120,
+    "auto_send_calendar_link": true,
+    "escalate_if_negotiation": true,
+    "email": {
+      "enabled": false,
+      "imap_server": "imap.gmail.com",
+      "imap_port": 993,
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587
+    }
+  },
+  "safety": {
+    "max_daily_applications": 15,
+    "pause_on_captcha": true,
+    "play_sound_on_hitl": true
+  }
+}
