@@ -12,16 +12,18 @@
   <header class="top-nav">
     <div class="brand-section">
       <span class="brand-title">AUTOJOB // RUNTIME TELEMETRY</span>
-      <span class="system-badge" id="systemStatus">DAEMON READY</span>
+      <span class="system-badge" id="systemStatus"><span class="pulse-dot"></span>DAEMON READY</span>
     </div>
     
     <div class="profile-telemetry">
-      <span>CANDIDATE: <strong id="navCandidateName">Pritam Biswas</strong></span>
+      <span>ARCHITECT: <strong id="navCandidateName">Pritam Biswas</strong></span>
       <span>RATE: <strong id="navCandidateRate">$65.00/HR</strong></span>
       <span>LOC: <strong>DHAKA [UTC+6]</strong></span>
     </div>
 
     <div class="nav-actions">
+      <button class="btn btn-sm agent-toggle-btn" id="headerAgentToggleBtn" onclick="toggleAgentRun()">[ START BOT ]</button>
+      <button class="auth-badge-btn" id="authStatusBtn" onclick="toggleAuthModal()">AUTH: LOCKED</button>
       <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">THEME: LIGHT</button>
       <a href="https://pritam-biswas-portfolio.netlify.app" target="_blank" class="btn btn-secondary btn-sm">PORTFOLIO</a>
       <a href="https://calendly.com/pritom580cse" target="_blank" class="btn btn-secondary btn-sm">CALENDLY</a>
@@ -30,59 +32,370 @@
 
   <!-- Navigation View Bar -->
   <nav class="view-nav">
-    <button class="view-nav-btn active" id="viewBtnJobs" onclick="switchMainView('jobs')">OPPORTUNITIES & PROPOSALS</button>
-    <button class="view-nav-btn" id="viewBtnMessages" onclick="switchMainView('messages')">INBOUND MESSAGES & EMAILS (<span id="inboundMsgBadge">3</span>)</button>
-    <button class="view-nav-btn" id="viewBtnContact" onclick="switchMainView('contact')">CONTACT INFO & PROFILE</button>
-    <button class="view-nav-btn" id="viewBtnConsole" onclick="switchMainView('console')">AGENT RUNNER CONSOLE</button>
+    <button class="view-nav-btn active" id="viewBtnLanding" onclick="switchMainView('landing')">LANDING PAGE & REELS</button>
+    <button class="view-nav-btn" id="viewBtnLiveProcess" onclick="switchMainView('live_process')">LIVE WORKING PROCESS</button>
+    <button class="view-nav-btn" id="viewBtnJobs" onclick="switchMainView('jobs')">OPPORTUNITIES & PROPOSALS</button>
+    <button class="view-nav-btn" id="viewBtnMessages" onclick="switchMainView('messages')">INBOUND COMMUNICATIONS (<span id="inboundMsgBadge">0</span>)</button>
+    <button class="view-nav-btn" id="viewBtnContact" onclick="switchMainView('contact')">CONTACT & DOSSIER</button>
+    <button class="view-nav-btn" id="viewBtnConsole" onclick="switchMainView('console')">RUNTIME CONSOLE</button>
   </nav>
 
   <!-- Main Dashboard Layout -->
   <main class="main-wrapper">
     
-    <!-- Metric Bento Row -->
-    <section class="bento-row">
-      <div class="metric-card">
-        <span class="metric-label">Discovered Leads</span>
-        <span class="metric-val" id="metricTotalJobs">0</span>
-        <span class="metric-sub">Scouted across job boards & APIs</span>
-      </div>
-      <div class="metric-card">
-        <span class="metric-label">High Matches (>=70%)</span>
-        <span class="metric-val" id="metricHighMatches">0</span>
-        <span class="metric-sub">Ranked against active tech stack</span>
-      </div>
-      <div class="metric-card">
-        <span class="metric-label">Recorded Applications</span>
-        <span class="metric-val" id="metricTotalApplied">0</span>
-        <span class="metric-sub">Logged in local application ledger</span>
-      </div>
-      <div class="metric-card">
-        <span class="metric-label">Client Communications</span>
-        <span class="metric-val" id="metricTotalConversations">0</span>
-        <span class="metric-sub">Inbound messages & emails handled</span>
-      </div>
-    </section>
+    <!-- ===================================================================
+         VIEW 0: LANDING PAGE & PROJECT OVERVIEW REELS
+         =================================================================== -->
+    <div id="mainViewLanding">
+      <div class="landing-wrapper">
+        
+        <!-- Hero Section with Minimal Ambient Background -->
+        <section class="landing-hero ambient-grid-bg scroll-reveal visible">
+          <div class="landing-hero-content">
+            <div class="landing-kicker">
+              <span class="pulse-dot"></span>
+              AUTONOMOUS WORKFORCE ENGINE // RUNTIME V1.2.0
+            </div>
+            <h1 class="landing-title">
+              Autonomous Client Acquisition & Remote Engineering Agent
+            </h1>
+            <p class="landing-subtitle">
+              Continuous multi-feed job scouting, Gemini 3.6 Flash technical proposal synthesis, sub-minute lead retention auto-responder, and stealth Playwright browser form-filling with human-in-the-loop verification.
+            </p>
+            
+            <!-- Creator & Architect Credit Badge -->
+            <div class="creator-badge-strip">
+              <span class="badge-tag">ENGINEERED BY</span>
+              <strong class="badge-name">PRITAM BISWAS</strong>
+              <span class="badge-sep">//</span>
+              <span class="badge-role">AI Systems Architect & Full-Stack Engineer</span>
+              <span class="badge-sep">//</span>
+              <a href="https://github.com/pbs002-s" target="_blank" class="badge-link">GITHUB @pbs002-s</a>
+              <span class="badge-sep">//</span>
+              <a href="https://pritam-biswas-portfolio.netlify.app" target="_blank" class="badge-link">PORTFOLIO</a>
+              <span class="badge-sep">//</span>
+              <a href="https://www.linkedin.com/in/pritom-biswas/" target="_blank" class="badge-link">LINKEDIN</a>
+            </div>
 
-    <!-- One-Click Agent Control Strip -->
-    <section class="control-strip">
-      <div class="control-strip-left">
-        <span>AGENT CONTROLLER:</span>
-        <span class="system-badge" id="runnerStatusBadge">IDLE</span>
+            <div class="landing-cta-row">
+              <button class="btn btn-primary agent-toggle-btn" id="heroAgentToggleBtn" onclick="toggleAgentRun()">[ START BOT ]</button>
+              <button class="btn btn-secondary" onclick="requestDashboardAccess('jobs')">[ ENTER DASHBOARD ]</button>
+              <button class="btn btn-secondary" onclick="switchMainView('live_process')">[ WATCH LIVE PROCESS ]</button>
+              <button class="btn btn-secondary" onclick="scrollToReels()">[ VIEW PROJECT REELS ]</button>
+            </div>
+          </div>
+
+          <div class="landing-stats-grid">
+            <div class="landing-stat-box">
+              <span class="landing-stat-num">5</span>
+              <span class="landing-stat-label">Real-Time Ingestion Feeds</span>
+            </div>
+            <div class="landing-stat-box">
+              <span class="landing-stat-num">91.7%</span>
+              <span class="landing-stat-label">Peak Match Precision</span>
+            </div>
+            <div class="landing-stat-box">
+              <span class="landing-stat-num">&lt; 60s</span>
+              <span class="landing-stat-label">Lead Holding Latency</span>
+            </div>
+            <div class="landing-stat-box">
+              <span class="landing-stat-num">100%</span>
+              <span class="landing-stat-label">HITL Safety Compliance</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Live Reels of Project Overview -->
+        <section class="reels-section scroll-reveal" id="projectReelsSection">
+          <div class="reels-top-bar">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="panel-title" style="font-size: 11px;">PROJECT OVERVIEW REELS</span>
+              <span class="system-badge" id="reelsPlayStatus">PLAYING</span>
+            </div>
+            <span class="target-meta" id="reelIndicatorLabel">REEL 1 OF 5 // MULTI-SOURCE SCOUT</span>
+          </div>
+
+          <!-- Reel Story Progress Segments -->
+          <div class="reels-progress-strip" id="reelsProgressStrip">
+            <div class="reels-seg" onclick="jumpToReel(0)"><div class="reels-seg-fill" id="reelBar0"></div></div>
+            <div class="reels-seg" onclick="jumpToReel(1)"><div class="reels-seg-fill" id="reelBar1"></div></div>
+            <div class="reels-seg" onclick="jumpToReel(2)"><div class="reels-seg-fill" id="reelBar2"></div></div>
+            <div class="reels-seg" onclick="jumpToReel(3)"><div class="reels-seg-fill" id="reelBar3"></div></div>
+            <div class="reels-seg" onclick="jumpToReel(4)"><div class="reels-seg-fill" id="reelBar4"></div></div>
+          </div>
+
+          <!-- Active Reel Stage -->
+          <div class="reels-stage" id="reelsStage">
+            <div class="reel-content-grid" id="reelContentContainer">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </div>
+
+          <!-- Reel Footer Controls -->
+          <div class="reels-footer-controls">
+            <button class="btn btn-secondary btn-sm" onclick="prevReel()">[ PREV REEL ]</button>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary btn-sm" id="btnToggleReelsPlay" onclick="toggleReelsPlay()">[ PAUSE ]</button>
+              <button class="btn btn-secondary btn-sm" onclick="nextReel()">[ NEXT REEL ]</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Architecture & System Pillars -->
+        <section class="dashboard-grid scroll-reveal">
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">System Architecture & Capabilities</span>
+              <span class="target-meta">AUTONOMOUS SPECIFICATION</span>
+            </div>
+            <div class="workbench-content" style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="border-left: 2px solid var(--ink); padding-left: 14px;">
+                <strong style="font-size: 13px; color: var(--ink);">01 // Multi-Source Opportunity Feeds</strong>
+                <p style="font-size: 12px; color: var(--ink-secondary); margin-top: 4px;">
+                  Pulls from RemoteOK API, Remotive Software Feed, Jobicy, WeWorkRemotely RSS, and Hacker News Y-Combinator "Who is Hiring" threads. Deduplicates across platforms via normalized slug hashing.
+                </p>
+              </div>
+
+              <div style="border-left: 2px solid var(--ink); padding-left: 14px;">
+                <strong style="font-size: 13px; color: var(--ink);">02 // Gemini 3.6 Flash Technical Synthesis</strong>
+                <p style="font-size: 12px; color: var(--ink-secondary); margin-top: 4px;">
+                  Dynamically cross-references job requirements against active production case studies (URA-Shree, EduSync, BhashaBot). Offers tone-tuned output in Standard, Technical, or Concise modes.
+                </p>
+              </div>
+
+              <div style="border-left: 2px solid var(--ink); padding-left: 14px;">
+                <strong style="font-size: 13px; color: var(--ink);">03 // Sub-60s Lead Holding & Safety Escalation</strong>
+                <p style="font-size: 12px; color: var(--ink-secondary); margin-top: 4px;">
+                  Detects inbound client inquiries and immediately provides relevant project credentials and a Calendly booking link. Flags complex contracts, NDAs, and payment negotiations for human review.
+                </p>
+              </div>
+
+              <div style="border-left: 2px solid var(--ink); padding-left: 14px;">
+                <strong style="font-size: 13px; color: var(--ink);">04 // Playwright Chromium Form Assistant</strong>
+                <p style="font-size: 12px; color: var(--ink-secondary); margin-top: 4px;">
+                  Inspects target DOM for application forms (Greenhouse, Lever, standard portals), auto-fills candidate dossier and proposal, attaches resume PDF, and pauses for final human inspection.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Architect Dossier & Creator Credit</span>
+              <span class="system-badge" style="background: var(--surface-inset); color: var(--ink);">PRITAM BISWAS</span>
+            </div>
+            <div class="workbench-content" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 14px;">
+              <div>
+                <div style="font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px;">
+                  Pritam Biswas
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--ink-secondary); margin-bottom: 12px;">
+                  AI Systems Architect, Full-Stack Engineer & Competitive Programmer // Dhaka, Bangladesh
+                </div>
+                
+                <div style="background: var(--surface-inset); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-family: var(--font-mono); font-size: 11px; line-height: 1.6; display: flex; flex-direction: column; gap: 6px;">
+                  <div>ENGINEERING RIGOR: 350+ Annual GitHub Commits | 100+ Competitive Challenges</div>
+                  <div>FLAGSHIP SYSTEMS:</div>
+                  <div style="color: var(--ink-muted); padding-left: 8px;">• URA-Shree: Custom 11.3M PyTorch LLM & Autonomous AST Coding Agent</div>
+                  <div style="color: var(--ink-muted); padding-left: 8px;">• EduSync: Multi-tenant digital campus (React 19, Socket.IO, Redis)</div>
+                  <div style="color: var(--ink-muted); padding-left: 8px;">• BhashaBot: 18-Language conversational customer retention bot</div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 14px; font-family: var(--font-mono); font-size: 11px; flex-wrap: wrap;">
+                  <a href="https://pritam-biswas-portfolio.netlify.app" target="_blank" style="color: var(--ink); text-decoration: underline;">[ PORTFOLIO ]</a>
+                  <a href="https://github.com/pbs002-s" target="_blank" style="color: var(--ink); text-decoration: underline;">[ GITHUB @pbs002-s ]</a>
+                  <a href="https://www.linkedin.com/in/pritom-biswas/" target="_blank" style="color: var(--ink); text-decoration: underline;">[ LINKEDIN ]</a>
+                  <a href="https://calendly.com/pritom580cse" target="_blank" style="color: var(--ink); text-decoration: underline;">[ BOOK 30-MIN INTRO ]</a>
+                </div>
+              </div>
+
+              <div style="margin-top: 16px;">
+                <button class="btn btn-primary" style="width: 100%; padding: 10px;" onclick="requestDashboardAccess('jobs')">
+                  [ UNLOCK TELEMETRY & WORKBENCH ]
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
       </div>
-      <div class="control-strip-actions">
-        <button class="btn btn-primary btn-sm" onclick="runAgentAction('full_cycle')">[ AUTOPILOT: FULL CYCLE ]</button>
-        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('scout')">[ RUN SCOUT ]</button>
-        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('top_proposal')">[ DRAFT TOP PROPOSAL ]</button>
-        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('responder')">[ RUN RESPONDER ]</button>
-        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('profile')">[ SYNTHESIZE PROFILES ]</button>
-        <button class="btn btn-secondary btn-sm" onclick="loadAllData()">[ REFRESH ]</button>
-      </div>
-    </section>
+    </div>
 
     <!-- ===================================================================
-         VIEW 1: OPPORTUNITIES & PROPOSALS
+         VIEW 1: LIVE WORKING PROCESS OF THE AGENT
          =================================================================== -->
-    <div id="mainViewJobs">
+    <div id="mainViewLiveProcess" style="display: none;">
+      
+      <!-- Interactive Pipeline Step Tracker -->
+      <section class="pipeline-tracker-strip scroll-reveal visible">
+        <div class="pipeline-node active" id="pNode1" onclick="triggerProcessStepManual(1)">
+          <span class="node-idx">1</span>
+          <span>1. SCOUT FEEDS</span>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="pNode2" onclick="triggerProcessStepManual(2)">
+          <span class="node-idx">2</span>
+          <span>2. SEMANTIC SCORE</span>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="pNode3" onclick="triggerProcessStepManual(3)">
+          <span class="node-idx">3</span>
+          <span>3. AI PROPOSAL</span>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="pNode4" onclick="triggerProcessStepManual(4)">
+          <span class="node-idx">4</span>
+          <span>4. BROWSER PREFILL</span>
+        </div>
+        <div class="pipeline-connector"></div>
+        <div class="pipeline-node" id="pNode5" onclick="triggerProcessStepManual(5)">
+          <span class="node-idx">5</span>
+          <span>5. LEAD RETENTION</span>
+        </div>
+      </section>
+
+      <!-- Live Execution Control Strip with Autonomous Start & Stop Buttons -->
+      <section class="control-strip">
+        <div class="control-strip-left">
+          <span class="pulse-dot" id="liveAgentStatusDot"></span>
+          <span>BOT STATUS:</span>
+          <span class="system-badge" id="liveProcessBadge">STOPPED // STANDBY</span>
+        </div>
+        <div class="control-strip-actions">
+          <button class="btn btn-sm agent-btn-start" id="btnStartAgentLive" onclick="startAgent()">[ START BOT ]</button>
+          <button class="btn btn-sm agent-btn-stop" id="btnStopAgentLive" onclick="stopAgent()" disabled>[ STOP BOT ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerProcessStepManual(1)">[ 1. SCOUT ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerProcessStepManual(2)">[ 2. SCORE ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerProcessStepManual(3)">[ 3. SYNTHESIS ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerProcessStepManual(4)">[ 4. BROWSER ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="triggerProcessStepManual(5)">[ 5. RETENTION ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="resetLiveProcess()">[ RESET ]</button>
+        </div>
+      </section>
+
+      <!-- Live Operation Inspector & Stream Grid -->
+      <section class="live-process-grid">
+        
+        <!-- Left: Stage Telemetry & Target Job Card -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title" id="liveStageTitle">Phase 1: Multi-Feed Scraping & Ingestion</span>
+            <span class="target-meta" id="liveStageStatusTag">READY</span>
+          </div>
+          <div class="workbench-content">
+            <div style="background: var(--surface-inset); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                  <span class="target-meta">TARGET OPPORTUNITY UNDER OPERATION</span>
+                  <div style="font-size: 15px; font-weight: 600; color: var(--ink); margin-top: 4px;" id="liveTargetJobTitle">
+                    Senior Full-Stack Engineer
+                  </div>
+                  <div style="font-size: 12px; color: var(--ink-secondary);" id="liveTargetJobCompany">
+                    TechScale Inc • WeWorkRemotely • Remote Worldwide
+                  </div>
+                </div>
+                <span class="score-badge score-high" id="liveTargetScore">88.5%</span>
+              </div>
+              <div style="margin-top: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-secondary);" id="liveTargetUrl">
+                https://weworkremotely.com/remote-jobs/...
+              </div>
+            </div>
+
+            <!-- Stage Parameters & Metrics -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-family: var(--font-mono); font-size: 11px;">
+              <div style="border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px;">
+                <span class="target-meta">INFERENCE MODEL</span>
+                <div style="font-weight: 600; color: var(--ink); margin-top: 2px;">Gemini 3.6 Flash</div>
+              </div>
+              <div style="border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px;">
+                <span class="target-meta">TARGET RATE</span>
+                <div style="font-weight: 600; color: var(--ink); margin-top: 2px;">$65.00/HR (Contract)</div>
+              </div>
+              <div style="border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px;">
+                <span class="target-meta">ACTIVE BROWSER</span>
+                <div style="font-weight: 600; color: var(--ink); margin-top: 2px;">Playwright Chromium</div>
+              </div>
+              <div style="border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px;">
+                <span class="target-meta">LEAD RETENTION</span>
+                <div style="font-weight: 600; color: var(--ink); margin-top: 2px;">&lt; 60s With Calendly</div>
+              </div>
+            </div>
+
+            <!-- Live Output Preview -->
+            <div style="margin-top: 14px;">
+              <span class="panel-title" style="font-size: 11px; margin-bottom: 6px; display: block;">Synthesized Output Preview</span>
+              <div class="reel-visual-card" id="liveOutputPreview" style="min-height: 120px;">
+                [Output will stream here as the agent executes each phase...]
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Monospace Execution Terminal Stream -->
+        <div class="panel">
+          <div class="panel-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="panel-title">Real-Time Process Log Stream</span>
+              <span class="system-badge" style="font-size: 10px;">STREAMING</span>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="clearLiveProcessLogs()">[ CLEAR ]</button>
+          </div>
+          <div class="terminal-logs" id="liveProcessLogTerminal" style="height: 480px; max-height: 520px;">
+            <div class="log-line">
+              <span class="log-time">[00:00:00]</span>
+              <span class="log-text">AUTOJOB RUNTIME PIPELINE INITIALIZED // READY.</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ===================================================================
+         VIEW 2: OPPORTUNITIES & PROPOSALS (WORKBENCH)
+         =================================================================== -->
+    <div id="mainViewJobs" style="display: none;">
+      
+      <!-- Metric Bento Row -->
+      <section class="bento-row">
+        <div class="metric-card">
+          <span class="metric-label">Discovered Leads</span>
+          <span class="metric-val" id="metricTotalJobs">0</span>
+          <span class="metric-sub">Scouted across 5 feeds & APIs</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">High Matches (>=70%)</span>
+          <span class="metric-val" id="metricHighMatches">0</span>
+          <span class="metric-sub">Ranked against active tech stack</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Recorded Applications</span>
+          <span class="metric-val" id="metricTotalApplied">0</span>
+          <span class="metric-sub">Logged in local application ledger</span>
+        </div>
+        <div class="metric-card">
+          <span class="metric-label">Client Communications</span>
+          <span class="metric-val" id="metricTotalConversations">0</span>
+          <span class="metric-sub">Inbound messages & emails handled</span>
+        </div>
+      </section>
+
+      <!-- One-Click Agent Control Strip -->
+      <section class="control-strip">
+        <div class="control-strip-left">
+          <span>AGENT CONTROLLER:</span>
+          <span class="system-badge" id="runnerStatusBadge">IDLE</span>
+        </div>
+        <div class="control-strip-actions">
+          <button class="btn btn-primary btn-sm" onclick="runAgentAction('full_cycle')">[ AUTOPILOT: FULL CYCLE ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="runAgentAction('scout')">[ RUN SCOUT ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="runAgentAction('top_proposal')">[ DRAFT TOP PROPOSAL ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="runAgentAction('responder')">[ RUN RESPONDER ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="runAgentAction('profile')">[ SYNTHESIZE PROFILES ]</button>
+          <button class="btn btn-secondary btn-sm" onclick="loadAllData()">[ REFRESH ]</button>
+        </div>
+      </section>
+
       <section class="dashboard-grid">
         
         <!-- Left Column: Scored Opportunities List -->
@@ -97,6 +410,19 @@
             </div>
           </div>
           
+          <!-- Search & Platform Filter Toolbar -->
+          <div style="padding: 8px 12px; border-bottom: 1px solid var(--border); display: flex; gap: 8px; background: var(--bg-surface-elevated, var(--bg-surface));">
+            <input type="text" id="jobSearchInput" class="form-input" placeholder="Search keywords (e.g. React, Python, YC, Contract)..." oninput="handleJobSearch(this.value)" style="font-size: 11px; padding: 4px 8px; flex: 1;">
+            <select id="platformFilterSelect" class="form-input" style="width: 140px; font-size: 11px; padding: 4px;" onchange="handlePlatformFilter(this.value)">
+              <option value="all">All 5 Feeds</option>
+              <option value="WeWorkRemotely">WeWorkRemotely</option>
+              <option value="Hacker News (YC)">Hacker News (YC)</option>
+              <option value="RemoteOK">RemoteOK</option>
+              <option value="Remotive">Remotive</option>
+              <option value="Jobicy">Jobicy</option>
+            </select>
+          </div>
+
           <div class="jobs-list" id="jobsListContainer">
             <div style="padding: 24px; text-align: center; color: var(--ink-muted); font-family: var(--font-mono);">
               Loading opportunities from database...
@@ -124,15 +450,28 @@
             </div>
 
             <div class="proposal-box">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="panel-title" style="font-size: 11px;">Custom Technical Proposal</span>
-                <button class="btn btn-secondary btn-sm" onclick="copyProposalText()">[ COPY TEXT ]</button>
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="panel-title" style="font-size: 11px;">AI Proposal (Gemini 3.6 Flash)</span>
+                  <select id="proposalToneSelect" class="form-input" style="font-size: 10px; padding: 2px 6px; width: auto;" onchange="regenerateWithSelectedTone()">
+                    <option value="standard">Standard (150-180 words)</option>
+                    <option value="technical">Technical (Architecture & Stack)</option>
+                    <option value="concise">Concise (&lt;100 words)</option>
+                  </select>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                  <button class="btn btn-secondary btn-sm" onclick="regenerateWithSelectedTone()">[ REGENERATE ]</button>
+                  <button class="btn btn-secondary btn-sm" onclick="copyProposalText()">[ COPY TEXT ]</button>
+                </div>
               </div>
               <textarea class="proposal-textarea" id="proposalTextarea" placeholder="Click '[ DRAFT ]' on any job listing to generate an AI-tailored application referencing your case studies..."></textarea>
               
               <div class="proposal-actions">
                 <span class="target-meta" id="proposalCitingLabel">Cited: URA-Shree / EduSync / BhashaBot</span>
-                <button class="btn btn-primary" id="btnRecordApplication" onclick="recordCurrentApplication()" disabled>[ RECORD APPLICATION ]</button>
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-secondary" id="btnBrowserPrefill" onclick="triggerBrowserPrefill()" disabled style="border-color: var(--accent); color: var(--accent);">[ PREFILL IN BROWSER ]</button>
+                  <button class="btn btn-primary" id="btnRecordApplication" onclick="recordCurrentApplication()" disabled>[ RECORD APPLICATION ]</button>
+                </div>
               </div>
             </div>
 
@@ -164,7 +503,7 @@
     </div>
 
     <!-- ===================================================================
-         VIEW 2: INBOUND MESSAGES & EMAILS
+         VIEW 3: INBOUND COMMUNICATIONS (EMAILS & MESSAGES)
          =================================================================== -->
     <div id="mainViewMessages" style="display: none;">
       <section class="conversations-view">
@@ -210,7 +549,7 @@
     </div>
 
     <!-- ===================================================================
-         VIEW 3: CONTACT INFO & PROFILE CREDENTIALS
+         VIEW 4: CONTACT INFO & PROFILE CREDENTIALS
          =================================================================== -->
     <div id="mainViewContact" style="display: none;">
       <section class="dashboard-grid">
@@ -303,7 +642,7 @@
     </div>
 
     <!-- ===================================================================
-         VIEW 4: LIVE AGENT RUNNER CONSOLE
+         VIEW 5: LIVE AGENT RUNNER CONSOLE
          =================================================================== -->
     <div id="mainViewConsole" style="display: none;">
       <section class="terminal-console-panel">
@@ -329,15 +668,44 @@
 
   </main>
 
-  <!-- Footer Telemetry -->
+  <!-- ===================================================================
+       SECURITY & PIN AUTHENTICATION GATE
+       =================================================================== -->
+  <div class="auth-modal-overlay" id="authModalOverlay" onclick="handleAuthOverlayClick(event)">
+    <div class="auth-modal-card">
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-secondary); text-transform: uppercase;">
+        SECURITY GATE PROTOCOL
+      </div>
+      <h3 style="font-size: 18px; margin: 8px 0 4px; color: var(--ink);">Authorization Required</h3>
+      <p style="font-size: 12px; color: var(--ink-muted);">
+        Enter authorization PIN to unlock telemetry and runtime controls.
+      </p>
+
+      <form id="authForm" onsubmit="submitAuthPin(event)">
+        <div class="auth-pin-display">
+          <input type="password" maxlength="4" id="authPinInput" class="auth-pin-input" placeholder="••••" autofocus required style="letter-spacing: 8px; width: 140px;">
+        </div>
+        <div style="font-family: var(--font-mono); font-size: 11px; margin-bottom: 14px; color: var(--ink-secondary);" id="authStatusMsg">
+          ENTER SYSTEM ACCESS PIN
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: center;">
+          <button type="button" class="btn btn-secondary" onclick="closeAuthModal()">[ CANCEL ]</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitPin">[ UNLOCK SYSTEM ]</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer Telemetry with Creator Credit -->
   <footer class="footer-bar">
     <div>
-      <span>AUTOJOB SYSTEM ENGINE // LOCAL RUNTIME</span>
+      <span>AUTOJOB SYSTEM ENGINE // ARCHITECTED BY <strong>PRITAM BISWAS</strong></span>
     </div>
     <div class="footer-links">
-      <a href="file:///c:/Users/Pritam/Downloads/autojob/config/profile.json" target="_blank">config/profile.json</a>
-      <a href="file:///c:/Users/Pritam/Downloads/autojob/config/config.json" target="_blank">config/config.json</a>
-      <a href="file:///c:/Users/Pritam/Downloads/autojob/.env" target="_blank">.env</a>
+      <a href="https://pritam-biswas-portfolio.netlify.app" target="_blank">PORTFOLIO</a>
+      <a href="https://github.com/pbs002-s" target="_blank">GITHUB: @pbs002-s</a>
+      <a href="https://www.linkedin.com/in/pritom-biswas/" target="_blank">LINKEDIN</a>
+      <a href="https://calendly.com/pritom580cse" target="_blank">CALENDLY</a>
     </div>
   </footer>
 

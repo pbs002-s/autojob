@@ -68,28 +68,16 @@ def run_profile_mode():
     print(f"Tags: {', '.join(fiverr['search_tags'])}")
     print(f"Basic Package: ${fiverr['packages']['Basic']['price']} - {fiverr['packages']['Basic']['name']}")
 
+from src.scrapers.hunter import JobHunter
+
 def run_scout_mode():
-    print("\n--- [2] Scouting Live Remote Jobs & Scoring Matches ---")
-    scraper = RemoteOKScraper()
-    proposal_agent = ProposalAgent()
-    db = Database()
+    print("\n--- [2] Scouting Live Opportunities Across 5 Remote Feeds ---")
+    hunter = JobHunter()
 
-    print("Fetching listings from RemoteOK API...")
-    jobs = scraper.fetch_jobs(limit=10)
-    print(f"Found {len(jobs)} active listings. Scoring against your profile...")
-
-    matched_count = 0
-    for job in jobs:
-        score = proposal_agent.score_job_match(job)
-        job.match_score = score
-        db.save_job(job)
-        
-        status_icon = "🔥" if score >= 70 else "⚪"
-        print(f"[{status_icon} Score: {score:4.1f}%] {job.title[:35]:35} | {job.company:20} | {job.url}")
-        if score >= 70:
-            matched_count += 1
-
-    print(f"\nSaved to database! {matched_count} jobs scored 70%+ match.")
+    print("Querying RemoteOK, Remotive, Jobicy, WeWorkRemotely & Hacker News...")
+    jobs = hunter.hunt_jobs(target_count=25)
+    matched_count = sum(1 for j in jobs if j.match_score >= 70.0)
+    print(f"\nSaved to database! {len(jobs)} opportunities evaluated ({matched_count} high matches >=70%).")
 
 def run_proposal_mode(min_score: float = 40.0):
     print("\n--- [3] Generating Tailored Proposal for Top Job ---")
@@ -108,12 +96,23 @@ def run_proposal_mode(min_score: float = 40.0):
     top_job = JobListing(**{k: v for k, v in top_job_data.items() if k != 'tags'}, tags=json.loads(top_job_data['tags']))
 
     print(f"\nTarget Job: {top_job.title} at {top_job.company} (Score: {top_job.match_score}%)")
+    print(f"Platform: {top_job.platform} | Location: {top_job.location}")
     print(f"URL: {top_job.url}")
-    print("\n--- Generated Custom Proposal ---")
-    proposal_text = proposal_agent.generate_proposal(top_job)
+    print("\n--- Generated Custom Proposal (Gemini 3.6 Flash) ---")
+    proposal_text = proposal_agent.generate_proposal(top_job, tone="standard")
     print(proposal_text)
-    print("---------------------------------")
+    print("-----------------------------------------------------")
     
+    try:
+        browser_choice = input("\nLaunch browser to pre-fill application form? (y/N): ").strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        browser_choice = 'n'
+    if browser_choice == 'y':
+        import asyncio
+        from src.browser.runner import JobApplicationAssistant
+        assistant = JobApplicationAssistant()
+        asyncio.run(assistant.auto_prefill_job(top_job.url, proposal_text))
+
     try:
         confirm = input("\nMark this job as applied in the database? (y/N): ").strip().lower()
     except (EOFError, KeyboardInterrupt):
