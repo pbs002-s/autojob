@@ -1,0 +1,24 @@
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Config with private credentials
+config/profile.json
+config/config.json
+.env
+
+# Local data & browser session cookies
+data/
+*.db
+*.sqlite3
+logs/
+
+# IDE files
+.vscode/
+.idea/
