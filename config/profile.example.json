@@ -1,0 +1,71 @@
+{
+  "personal_info": {
+    "full_name": "Alex Mercer",
+    "professional_title": "Full-Stack Engineer & AI Automation Specialist",
+    "email": "alex.mercer.dev@example.com",
+    "phone": "+1 (555) 019-2834",
+    "location": "Remote / New York, USA",
+    "portfolio_url": "https://alexmercer.dev",
+    "github_url": "https://github.com/alexmercer",
+    "linkedin_url": "https://linkedin.com/in/alexmercer",
+    "calendar_booking_url": "https://cal.com/alex-mercer/15min"
+  },
+  "preferences": {
+    "target_roles": [
+      "Full Stack Developer",
+      "Python / AI Automation Engineer",
+      "React / Next.js Specialist",
+      "Freelance Web Developer"
+    ],
+    "employment_types": [
+      "contract",
+      "freelance",
+      "remote_part_time",
+      "remote_full_time"
+    ],
+    "rates": {
+      "minimum_hourly_usd": 40,
+      "preferred_hourly_usd": 65,
+      "minimum_project_budget_usd": 500
+    },
+    "max_weekly_hours": 30
+  },
+  "bios": {
+    "short_tagline": "Senior Full-Stack & AI Automation Engineer | Building High-Conversion Web Apps & Custom AI Agents",
+    "short_bio": "Full-Stack developer with 5+ years of experience specializing in React, Next.js, Python, and intelligent browser automations. I help startups and businesses build resilient web applications and automate complex workflows.",
+    "detailed_overview": "I am a Full-Stack Engineer and Automation Architect with 5+ years of experience delivering robust web platforms, automated crawlers, and AI-driven applications.\n\nMy core specialties include:\n- Modern Web Development: Next.js, React, Node.js, TypeScript, TailwindCSS\n- Backend & APIs: Python (FastAPI/Flask/Django), PostgreSQL, Redis, REST & GraphQL\n- Automation & Web Scraping: Playwright, Puppeteer, Selenium, Custom Multi-Agent Systems\n- AI Integrations: LLM API pipelines (Gemini, Claude, GPT), embeddings, automated customer support\n\nI focus on high performance, clean architectures, and clear communication. Let's connect to discuss how we can bring your next project to life!"
+  },
+  "skills": {
+    "primary": ["Python", "JavaScript", "TypeScript", "React", "Next.js", "Node.js"],
+    "backend_and_database": ["FastAPI", "Express", "PostgreSQL", "MongoDB", "Redis", "Supabase"],
+    "automation_and_ai": ["Playwright", "Puppeteer", "Web Scraping", "LangChain", "LLM APIs", "Workflow Automation"],
+    "devops_and_tools": ["Docker", "Git", "GitHub Actions", "Vercel", "AWS", "Linux"]
+  },
+  "case_studies": [
+    {
+      "title": "Autonomous B2B Lead Generation & Scraping Engine",
+      "role": "Lead Engineer",
+      "tech_stack": ["Python", "Playwright", "PostgreSQL", "FastAPI"],
+      "summary": "Engineered a distributed browser automation system that extracts and scores 10,000+ prospective leads weekly, reducing manual prospecting time by 85%.",
+      "live_url": "https://alexmercer.dev/projects/lead-engine"
+    },
+    {
+      "title": "E-Commerce SaaS Dashboard & Storefront",
+      "role": "Full-Stack Developer",
+      "tech_stack": ["Next.js", "TypeScript", "TailwindCSS", "Stripe"],
+      "summary": "Built an end-to-end responsive dashboard with real-time analytics, automated invoicing, and sub-second page loads.",
+      "live_url": "https://alexmercer.dev/projects/ecommerce-saas"
+    }
+  ],
+  "screening_answers": {
+    "years_of_experience": "5",
+    "authorized_to_work_remotely": "Yes",
+    "notice_period": "Immediate / Within 3 days",
+    "english_proficiency": "Fluent / Native",
+    "timezone": "UTC-5 (EST) with flexible working hours for US/EU clients"
+  },
+  "client_holding_templates": {
+    "initial_acknowledgment": "Hi {client_name}, thanks for reaching out regarding the {project_name}! I have reviewed your requirements and would love to help you build this out. You can check out a few of my live projects here: {portfolio_url}. When is a good time for a quick 10-15 min chat? You can also grab a slot directly on my calendar: {calendar_url}.",
+    "rate_and_availability_response": "Hi {client_name}, thanks for asking! My standard rate for this scope is ${hourly_rate}/hr (or fixed milestone pricing if preferred). I can allocate 15-20 hours per week starting immediately. Would you like to do a quick intro call to finalize the milestones? Here is my booking link: {calendar_url}."
+  }
+}
