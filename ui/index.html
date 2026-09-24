@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoJob AI // Telemetry & Client Acquisition System</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation & System Status -->
+  <header class="top-nav">
+    <div class="brand-section">
+      <span class="brand-title">AUTOJOB // RUNTIME TELEMETRY</span>
+      <span class="system-badge" id="systemStatus">DAEMON READY</span>
+    </div>
+    
+    <div class="profile-telemetry">
+      <span>CANDIDATE: <strong id="navCandidateName">Pritam Biswas</strong></span>
+      <span>RATE: <strong id="navCandidateRate">$65.00/HR</strong></span>
+      <span>LOC: <strong>DHAKA [UTC+6]</strong></span>
+    </div>
+
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()">THEME: LIGHT</button>
+      <a href="https://pritam-biswas-portfolio.netlify.app" target="_blank" class="btn btn-secondary btn-sm">PORTFOLIO</a>
+      <a href="https://calendly.com/pritom580cse" target="_blank" class="btn btn-secondary btn-sm">CALENDLY</a>
+    </div>
+  </header>
+
+  <!-- Navigation View Bar -->
+  <nav class="view-nav">
+    <button class="view-nav-btn active" id="viewBtnJobs" onclick="switchMainView('jobs')">OPPORTUNITIES & PROPOSALS</button>
+    <button class="view-nav-btn" id="viewBtnMessages" onclick="switchMainView('messages')">INBOUND MESSAGES & EMAILS (<span id="inboundMsgBadge">3</span>)</button>
+    <button class="view-nav-btn" id="viewBtnContact" onclick="switchMainView('contact')">CONTACT INFO & PROFILE</button>
+    <button class="view-nav-btn" id="viewBtnConsole" onclick="switchMainView('console')">AGENT RUNNER CONSOLE</button>
+  </nav>
+
+  <!-- Main Dashboard Layout -->
+  <main class="main-wrapper">
+    
+    <!-- Metric Bento Row -->
+    <section class="bento-row">
+      <div class="metric-card">
+        <span class="metric-label">Discovered Leads</span>
+        <span class="metric-val" id="metricTotalJobs">0</span>
+        <span class="metric-sub">Scouted across job boards & APIs</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">High Matches (>=70%)</span>
+        <span class="metric-val" id="metricHighMatches">0</span>
+        <span class="metric-sub">Ranked against active tech stack</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Recorded Applications</span>
+        <span class="metric-val" id="metricTotalApplied">0</span>
+        <span class="metric-sub">Logged in local application ledger</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">Client Communications</span>
+        <span class="metric-val" id="metricTotalConversations">0</span>
+        <span class="metric-sub">Inbound messages & emails handled</span>
+      </div>
+    </section>
+
+    <!-- One-Click Agent Control Strip -->
+    <section class="control-strip">
+      <div class="control-strip-left">
+        <span>AGENT CONTROLLER:</span>
+        <span class="system-badge" id="runnerStatusBadge">IDLE</span>
+      </div>
+      <div class="control-strip-actions">
+        <button class="btn btn-primary btn-sm" onclick="runAgentAction('full_cycle')">[ AUTOPILOT: FULL CYCLE ]</button>
+        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('scout')">[ RUN SCOUT ]</button>
+        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('top_proposal')">[ DRAFT TOP PROPOSAL ]</button>
+        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('responder')">[ RUN RESPONDER ]</button>
+        <button class="btn btn-secondary btn-sm" onclick="runAgentAction('profile')">[ SYNTHESIZE PROFILES ]</button>
+        <button class="btn btn-secondary btn-sm" onclick="loadAllData()">[ REFRESH ]</button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         VIEW 1: OPPORTUNITIES & PROPOSALS
+         =================================================================== -->
+    <div id="mainViewJobs">
+      <section class="dashboard-grid">
+        
+        <!-- Left Column: Scored Opportunities List -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Scored Opportunities</span>
+            <div class="filter-tabs">
+              <button class="tab-btn active" data-filter="all" onclick="filterJobs('all')">ALL</button>
+              <button class="tab-btn" data-filter="discovered" onclick="filterJobs('discovered')">UNAPPLIED</button>
+              <button class="tab-btn" data-filter="applied" onclick="filterJobs('applied')">APPLIED</button>
+              <button class="tab-btn" data-filter="high" onclick="filterJobs('high')">HIGH MATCH</button>
+            </div>
+          </div>
+          
+          <div class="jobs-list" id="jobsListContainer">
+            <div style="padding: 24px; text-align: center; color: var(--ink-muted); font-family: var(--font-mono);">
+              Loading opportunities from database...
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Proposal Workbench -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Proposal Workbench</span>
+            <span class="target-meta" id="workbenchStatusTag">READY</span>
+          </div>
+
+          <div class="workbench-content">
+            <div class="target-job-card" id="targetJobCard">
+              <div class="target-job-header">
+                <div>
+                  <strong id="targetJobTitle" style="font-size: 15px; color: var(--ink);">Select an opportunity to view or generate proposal</strong>
+                  <div class="target-meta" id="targetJobCompany">Company / Platform / URL</div>
+                </div>
+                <span class="score-badge score-mid" id="targetJobScore">--%</span>
+              </div>
+              <div class="target-meta" id="targetJobUrlRow" style="word-break: break-all;"></div>
+            </div>
+
+            <div class="proposal-box">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="panel-title" style="font-size: 11px;">Custom Technical Proposal</span>
+                <button class="btn btn-secondary btn-sm" onclick="copyProposalText()">[ COPY TEXT ]</button>
+              </div>
+              <textarea class="proposal-textarea" id="proposalTextarea" placeholder="Click '[ DRAFT ]' on any job listing to generate an AI-tailored application referencing your case studies..."></textarea>
+              
+              <div class="proposal-actions">
+                <span class="target-meta" id="proposalCitingLabel">Cited: URA-Shree / EduSync / BhashaBot</span>
+                <button class="btn btn-primary" id="btnRecordApplication" onclick="recordCurrentApplication()" disabled>[ RECORD APPLICATION ]</button>
+              </div>
+            </div>
+
+            <!-- Ledger of recorded applications -->
+            <div style="margin-top: 10px;">
+              <span class="panel-title" style="font-size: 11px; margin-bottom: 8px; display: block;">Application Ledger</span>
+              <div style="border: 1px solid var(--border); border-radius: var(--radius-sm); overflow-x: auto;">
+                <table class="applied-table">
+                  <thead>
+                    <tr>
+                      <th>Job Title</th>
+                      <th>Company</th>
+                      <th>Score</th>
+                      <th>Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody id="appliedTableBody">
+                    <tr>
+                      <td colspan="4" style="text-align: center; color: var(--ink-muted);">No applications recorded yet</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ===================================================================
+         VIEW 2: INBOUND MESSAGES & EMAILS
+         =================================================================== -->
+    <div id="mainViewMessages" style="display: none;">
+      <section class="conversations-view">
+        
+        <!-- Simulate / Receive New Message Strip -->
+        <div class="new-msg-strip">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="panel-title" style="font-size: 11px;">Simulate Inbound Inquiry (Email / Platform)</span>
+            <span class="target-meta">Evaluates scope & dispatches holding response with Calendly</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 160px 220px 1fr auto; gap: 8px;">
+            <select id="newMsgPlatform" class="form-input" style="font-size: 11px;">
+              <option value="Email / Gmail">Email / Gmail</option>
+              <option value="Upwork Messages">Upwork Messages</option>
+              <option value="LinkedIn InMail">LinkedIn InMail</option>
+              <option value="Freelancer.com">Freelancer.com</option>
+            </select>
+            <input type="text" id="newMsgSender" class="form-input" placeholder="Sender / Client Name" value="David Miller (Founding Partner)">
+            <input type="text" id="newMsgContent" class="form-input" placeholder="Message content..." value="Hi Pritam! Can we schedule a brief 15-minute intro chat this Thursday?">
+            <button class="btn btn-primary btn-sm" onclick="sendInboundSimulation()">[ RECEIVE & AUTO-HOLD ]</button>
+          </div>
+        </div>
+
+        <!-- Communications Filter & List -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Inbound Communications Ledger</span>
+            <div class="filter-tabs">
+              <button class="tab-btn active" data-conv-filter="all" onclick="filterConversations('all')">ALL</button>
+              <button class="tab-btn" data-conv-filter="Email" onclick="filterConversations('Email')">EMAIL</button>
+              <button class="tab-btn" data-conv-filter="Upwork" onclick="filterConversations('Upwork')">UPWORK</button>
+              <button class="tab-btn" data-conv-filter="LinkedIn" onclick="filterConversations('LinkedIn')">LINKEDIN</button>
+              <button class="tab-btn" data-conv-filter="escalation" onclick="filterConversations('escalation')">ESCALATIONS</button>
+            </div>
+          </div>
+          
+          <div class="workbench-content" id="conversationsContainer">
+            <!-- Dynamic thread cards populate here -->
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ===================================================================
+         VIEW 3: CONTACT INFO & PROFILE CREDENTIALS
+         =================================================================== -->
+    <div id="mainViewContact" style="display: none;">
+      <section class="dashboard-grid">
+        
+        <!-- Left: Editable Contact & Profile Form -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Direct Contact & Rates Configuration</span>
+            <span class="target-meta">Saved to config/profile.json</span>
+          </div>
+          <div class="workbench-content">
+            <form id="contactForm" onsubmit="saveContactInfo(event)" class="contact-form-grid">
+              
+              <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text" id="cfgFullName" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Professional Title</label>
+                <input type="text" id="cfgProfessionalTitle" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Contact Email</label>
+                <input type="email" id="cfgEmail" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text" id="cfgPhone" class="form-input" placeholder="+8801796626356">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Location / Base</label>
+                <input type="text" id="cfgLocation" class="form-input" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Preferred Hourly Rate (USD)</label>
+                <input type="number" id="cfgHourlyRate" class="form-input" step="5" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Minimum Project Budget (USD)</label>
+                <input type="number" id="cfgMinBudget" class="form-input" step="50" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Calendar Booking URL (Calendly)</label>
+                <input type="url" id="cfgCalendarUrl" class="form-input" placeholder="https://calendly.com/...">
+              </div>
+
+              <div class="form-group" style="grid-column: span 2;">
+                <label class="form-label">Portfolio URL</label>
+                <input type="url" id="cfgPortfolioUrl" class="form-input" placeholder="https://...">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">GitHub URL</label>
+                <input type="url" id="cfgGithubUrl" class="form-input" placeholder="https://github.com/...">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">LinkedIn URL</label>
+                <input type="url" id="cfgLinkedinUrl" class="form-input" placeholder="https://linkedin.com/in/...">
+              </div>
+
+              <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+                <span class="target-meta" id="contactSaveStatus">Ready</span>
+                <button type="submit" class="btn btn-primary">[ SAVE CONTACT INFO ]</button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Active Case Studies & Credentials -->
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Active Project Case Studies</span>
+            <span class="target-meta">Injected into proposals & responses</span>
+          </div>
+          <div class="workbench-content">
+            <div id="profileCaseStudiesList" style="display: flex; flex-direction: column; gap: 12px;"></div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- ===================================================================
+         VIEW 4: LIVE AGENT RUNNER CONSOLE
+         =================================================================== -->
+    <div id="mainViewConsole" style="display: none;">
+      <section class="terminal-console-panel">
+        <div class="panel-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="panel-title">Autonomous Execution Terminal</span>
+            <span class="system-badge" id="terminalStatusBadge">STANDBY</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="clearTerminalLogs()">[ CLEAR LOGS ]</button>
+        </div>
+        <div class="terminal-logs" id="terminalLogsContainer">
+          <div class="log-line">
+            <span class="log-time">[00:00:00]</span>
+            <span class="log-text">AUTOJOB RUNTIME DAEMON INITIALIZED // ALL SUBSYSTEMS NOMINAL.</span>
+          </div>
+          <div class="log-line">
+            <span class="log-time">[00:00:01]</span>
+            <span class="log-text">Candidate profile active: Pritam Biswas | Hourly Target: $65.00/hr | Calendly link active.</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <!-- Footer Telemetry -->
+  <footer class="footer-bar">
+    <div>
+      <span>AUTOJOB SYSTEM ENGINE // LOCAL RUNTIME</span>
+    </div>
+    <div class="footer-links">
+      <a href="file:///c:/Users/Pritam/Downloads/autojob/config/profile.json" target="_blank">config/profile.json</a>
+      <a href="file:///c:/Users/Pritam/Downloads/autojob/config/config.json" target="_blank">config/config.json</a>
+      <a href="file:///c:/Users/Pritam/Downloads/autojob/.env" target="_blank">.env</a>
+    </div>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
