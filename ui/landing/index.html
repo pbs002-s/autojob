@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem("aj-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/assets/shared/tokens.css">
   <link rel="stylesheet" href="/assets/landing/landing.css">
 </head>
@@ -19,6 +20,7 @@
       <a href="#features">System</a>
       <a href="#stats">Live</a>
     </nav>
+    <button class="btn btn-sm theme-btn" data-theme-toggle type="button"></button>
     <a class="btn btn-sm" id="navCta" href="/login">Sign in</a>
   </header>
 
@@ -37,15 +39,15 @@
       <div class="hero-visual" id="core" aria-hidden="true">
         <svg viewBox="-200 -200 400 400">
           <defs>
-            <radialGradient id="glow"><stop offset="0" stop-color="#ccff00" stop-opacity=".35"/><stop offset="1" stop-color="#ccff00" stop-opacity="0"/></radialGradient>
+            <radialGradient id="glow"><stop offset="0" style="stop-color:var(--acid)" stop-opacity=".35"/><stop offset="1" style="stop-color:var(--acid)" stop-opacity="0"/></radialGradient>
           </defs>
           <circle r="190" fill="url(#glow)"/>
-          <g class="ring r1"><circle r="170" fill="none" stroke="#333" stroke-dasharray="2 8"/></g>
-          <g class="ring r2"><circle r="130" fill="none" stroke="#444" stroke-dasharray="40 12"/></g>
-          <g class="ring r3"><circle r="90" fill="none" stroke="#ccff00" stroke-opacity=".5" stroke-dasharray="4 4"/></g>
+          <g class="ring r1"><circle r="170" fill="none" style="stroke:var(--line-2)" stroke-dasharray="2 8"/></g>
+          <g class="ring r2"><circle r="130" fill="none" style="stroke:var(--line-3)" stroke-dasharray="40 12"/></g>
+          <g class="ring r3"><circle r="90" fill="none" style="stroke:var(--acid)" stroke-opacity=".5" stroke-dasharray="4 4"/></g>
           <g class="nodes"></g>
-          <rect x="-34" y="-34" width="68" height="68" fill="#000" stroke="#ccff00" transform="rotate(45)"/>
-          <text y="5" text-anchor="middle" fill="#ccff00" font-family="JetBrains Mono" font-size="13">AJ</text>
+          <rect x="-34" y="-34" width="68" height="68" style="fill:var(--void);stroke:var(--acid)" transform="rotate(45)"/>
+          <text y="5" text-anchor="middle" style="fill:var(--acid)" font-family="JetBrains Mono" font-size="13">AJ</text>
         </svg>
         <div class="float-card panel">
           <p class="label">Now drafting</p>
@@ -55,7 +57,7 @@
       </div>
     </section>
 
-    <svg class="divider" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V30h360l40-30h640l40 30h360v30z" fill="#0a0a0a"/></svg>
+    <svg class="divider" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V30h360l40-30h640l40 30h360v30z" style="fill:var(--panel)"/></svg>
 
     <section class="stats" id="stats" aria-label="Live numbers">
       <div class="stat"><span class="stat-n" data-key="jobs_scanned">—</span><span class="label">roles scanned</span></div>
@@ -70,8 +72,8 @@
           <p class="label">The pipeline</p>
           <h2 id="how-title">Five phases.<br>One loop.</h2>
           <svg class="how-track" viewBox="0 0 8 400" preserveAspectRatio="none" aria-hidden="true">
-            <line x1="4" y1="0" x2="4" y2="400" stroke="#222" stroke-width="2"/>
-            <line class="how-fill" x1="4" y1="0" x2="4" y2="400" stroke="#ccff00" stroke-width="2"/>
+            <line x1="4" y1="0" x2="4" y2="400" style="stroke:var(--line)" stroke-width="2"/>
+            <line class="how-fill" x1="4" y1="0" x2="4" y2="400" style="stroke:var(--acid)" stroke-width="2"/>
           </svg>
         </div>
         <ol class="phases">

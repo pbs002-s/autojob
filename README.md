@@ -103,7 +103,25 @@ python main.py --mode ui        # http://127.0.0.1:8000
 - `/` landing page, `/login` sign in (and demo cards), `/app/*` dashboard.
 - Roles: **admin** (everything, incl. dossier edits, console, users), **operator** (run agent, draft, pre-fill, record applications), **viewer** (read-only). Enforced server-side in `src/auth/rbac.py`.
 - Demo sessions use `data/demo.db` + `data/demo_profile.json`, never call Gemini, never launch a browser, and reset every 30 minutes.
+- Light and dark mode follow your OS; the sun/moon button in the top bar overrides it (remembered per browser).
 - Tests: `python -m pytest tests -q`
+
+#### Sending applications and replies by email (optional)
+
+Add SMTP settings to `.env` and restart. For Gmail, turn on 2-Step Verification and create an
+[App Password](https://myaccount.google.com/apppasswords); your normal password will not work.
+
+```bash
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587               # 465 for implicit SSL
+SMTP_USER=you@gmail.com
+SMTP_PASSWORD=your-16-char-app-password
+SMTP_FROM=you@gmail.com     # optional, defaults to SMTP_USER
+```
+
+- **Opportunities → pick a role → Draft → Apply by email** sends the (editable) proposal to the recruiter and records the application.
+- **Inbox → Test the auto-responder**: fill in *Client email* to email routine auto-replies. Escalations (NDAs, contracts, payments) are never emailed automatically.
+- Demo sessions simulate sends; nothing leaves the machine.
 
 ---
 

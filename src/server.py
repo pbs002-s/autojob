@@ -11,7 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from src.api import agent, inbox, jobs, profile, public, users
+from src.api import agent, email, inbox, jobs, profile, public, users
 from src.auth import routes as auth_routes
 from src.auth.security import MIN_PASSWORD_LENGTH
 from src.auth.store import AuthStore
@@ -101,7 +101,7 @@ def create_app(settings: Settings = None) -> FastAPI:
         fields = [".".join(str(x) for x in e["loc"][1:]) or "body" for e in exc.errors()]
         return _error_envelope(422, f"Invalid input: {', '.join(fields)}")
 
-    for module in (auth_routes, agent, jobs, inbox, profile, users, public):
+    for module in (auth_routes, agent, jobs, inbox, email, profile, users, public):
         app.include_router(module.router)
 
     @app.get("/api/{rest:path}", include_in_schema=False)

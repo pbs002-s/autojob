@@ -87,6 +87,15 @@ def me(principal: Principal = Depends(current_principal)) -> dict:
     return _me(principal)
 
 
+@router.get("/session")
+def session(request: Request) -> dict:
+    """Public: current session or {signed_in: false}. Avoids a 401 on every public page load."""
+    try:
+        return {"signed_in": True, **_me(current_principal(request))}
+    except HTTPException:
+        return {"signed_in": False}
+
+
 @router.get("/config")
 def auth_config(request: Request) -> dict:
     """Public: tells the login page whether to show demo cards."""

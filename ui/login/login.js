@@ -1,5 +1,6 @@
 import { api, getSession } from "/assets/shared/api.js";
-import { gsap, leave } from "/assets/shared/motion.js";
+import { gsap, leave, reduced, splitWords } from "/assets/shared/motion.js";
+import { mountThemeToggle } from "/assets/shared/theme.js";
 
 // Only follow same-site relative paths after login (no open redirect).
 function nextUrl() {
@@ -7,14 +8,17 @@ function nextUrl() {
   return /^\/app(\/[\w-]*)?$/.test(next) ? next : "/app/overview";
 }
 
+document.querySelectorAll("[data-theme-toggle]").forEach(mountThemeToggle);
+
 async function init() {
   if (await getSession()) { location.replace(nextUrl()); return; }
 
   const { demo_enabled } = await api("/api/auth/config").catch(() => ({ demo_enabled: false }));
   document.getElementById("demo").hidden = !demo_enabled;
 
-  if (gsap) {
+  if (gsap && !reduced) {
     gsap.from("main > section", { y: 24, opacity: 0, stagger: 0.12 });
+    gsap.from(splitWords(document.getElementById("signin-title")), { yPercent: 110, stagger: 0.08, duration: 0.9, delay: 0.1 });
     gsap.from(".demo-card", { x: 24, opacity: 0, stagger: 0.07, delay: 0.25 });
   }
   if (location.hash === "#demo" && demo_enabled) document.querySelector(".demo-card")?.focus();

@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from typing import Dict, Any, Tuple
 from src.models import MasterProfile, InboundMessage
+from src.textfmt import clean_markdown
 
 def _ensure_env():
     if not os.getenv("GEMINI_API_KEY"):
@@ -94,7 +95,7 @@ class ResponderAgent:
                     if candidates:
                         gen_text = candidates[0].get("content", {}).get("parts", [{}])[0].get("text", "")
                         if gen_text and gen_text.strip():
-                            return gen_text.strip(), False
+                            return clean_markdown(gen_text), False
             except Exception as e:
                 print(f"[ResponderAgent] Gemini API notice: {e}, falling back to heuristics")
 
