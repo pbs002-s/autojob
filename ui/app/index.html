@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Console · AutoJob</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/shared/tokens.css">
+  <link rel="stylesheet" href="/assets/app/app.css">
+</head>
+<body class="noise">
+  <div class="demo-banner" id="demoBanner" hidden>Demo mode · sample data · resets every 30 min · <a href="/login">sign in for real</a></div>
+  <div class="shell">
+    <aside class="side" id="side" aria-label="Console navigation">
+      <a class="brand" href="/"><span class="brand-mark"></span>AUTOJOB</a>
+      <nav id="nav"></nav>
+      <div class="side-foot">
+        <a class="side-link" href="/"><svg class="icon" aria-hidden="true"><use href="/assets/shared/sprite.svg#i-back"/></svg>Back to site</a>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="top">
+        <button class="btn btn-sm menu-btn" id="menuBtn" aria-label="Toggle navigation" aria-controls="side" aria-expanded="false"><svg class="icon" aria-hidden="true"><use href="/assets/shared/sprite.svg#i-menu"/></svg></button>
+        <h1 class="top-title" id="viewTitle">Overview</h1>
+        <span class="chip" id="agentChip"><span class="dot"></span><span>Agent idle</span></span>
+        <button class="btn btn-sm" id="agentToggle" hidden></button>
+        <span class="who"><span class="mono" id="whoEmail"></span><span class="chip" id="whoRole"></span></span>
+        <button class="btn btn-sm btn-danger" id="logoutBtn"><svg class="icon" aria-hidden="true"><use href="/assets/shared/sprite.svg#i-logout"/></svg><span class="hide-sm">Sign out</span></button>
+      </header>
+      <main id="view" tabindex="-1"></main>
+    </div>
+  </div>
+  <div class="chart-tip" id="chartTip" role="tooltip" hidden></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/Flip.min.js"></script>
+  <script type="module" src="/assets/app/app.js"></script>
+</body>
+</html>
