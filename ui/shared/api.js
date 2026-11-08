@@ -27,7 +27,8 @@ export async function api(path, { method = "GET", body } = {}) {
 
 export async function getSession() {
   try {
-    const me = await api("/api/auth/me");
+    const me = await api("/api/auth/session");
+    if (!me.signed_in) return null;
     setCsrf(me.csrf_token);
     return me;
   } catch {
@@ -42,6 +43,9 @@ export const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ESC[c]);
 export const safeUrl = (u) => (/^https?:\/\//i.test(u || "") ? esc(u) : "#");
 
 export const icon = (id, cls = "icon") => `<svg class="${cls}" aria-hidden="true"><use href="/assets/shared/sprite.svg#i-${id}"/></svg>`;
+
+// Drop earlier toasts so the next one clearly belongs to the action just taken.
+export function clearToasts() { document.querySelectorAll(".toast").forEach((t) => t.remove()); }
 
 export function toast(message, kind = "ok") {
   let box = document.querySelector(".toasts");

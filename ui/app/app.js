@@ -1,5 +1,6 @@
 import { api, getSession, toast, icon, esc } from "/assets/shared/api.js";
-import { gsap, reduced } from "/assets/shared/motion.js";
+import { gsap, reduced, scramble } from "/assets/shared/motion.js";
+import { mountThemeToggle } from "/assets/shared/theme.js";
 import overview from "./views/overview.js";
 import pipeline from "./views/pipeline.js";
 import opportunities from "./views/opportunities.js";
@@ -49,7 +50,7 @@ async function navigate(path, push = true) {
   document.querySelectorAll(".side-link[data-view]").forEach((a) => {
     if (a.dataset.view === view) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
-  document.getElementById("viewTitle").textContent = VIEWS[view].label;
+  scramble(document.getElementById("viewTitle"), VIEWS[view].label);
   document.title = `${VIEWS[view].label} · AutoJob`;
   document.getElementById("side").classList.remove("open");
   viewEl.innerHTML = `<div class="empty"><span class="spinner"></span></div>`;
@@ -71,7 +72,9 @@ async function pollAgent() {
   chip.className = `chip ${agentState.running ? "ok" : ""}`;
   chip.innerHTML = `<span class="dot ${agentState.running ? "pulse" : ""}"></span><span>${agentState.running ? "Agent running" : "Agent idle"}</span>`;
   const toggle = document.getElementById("agentToggle");
-  toggle.innerHTML = agentState.running ? `${icon("stop")}Stop` : `${icon("play")}Start agent`;
+  const label = agentState.running ? "Stop agent" : "Start agent";
+  toggle.innerHTML = `${icon(agentState.running ? "stop" : "play")}<span class="hide-sm">${label}</span>`;
+  toggle.setAttribute("aria-label", label);
   agentListeners.forEach((fn) => fn(agentState));
 }
 
@@ -120,6 +123,13 @@ async function init() {
     location.href = "/";
   });
 
+  document.querySelectorAll("[data-theme-toggle]").forEach(mountThemeToggle);
+  // "/" jumps to the search box on views that have one.
+  addEventListener("keydown", (e) => {
+    if (e.key !== "/" || /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName)) return;
+    const box = viewEl.querySelector("input[type=search]");
+    if (box) { e.preventDefault(); box.focus(); }
+  });
   introShell();
   await pollAgent();
   setInterval(() => { if (!document.hidden) pollAgent(); }, POLL_MS);

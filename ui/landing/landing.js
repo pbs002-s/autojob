@@ -1,4 +1,5 @@
 import { gsap, reduced, splitWords, countUp, leave } from "/assets/shared/motion.js";
+import { mountThemeToggle } from "/assets/shared/theme.js";
 
 const PHASE_COUNT = 5;
 
@@ -33,7 +34,7 @@ function initCore() {
   const nodes = document.querySelector("#core .nodes");
   nodes.innerHTML = Array.from({ length: PHASE_COUNT }, (_, i) => {
     const a = (i / PHASE_COUNT) * Math.PI * 2 - Math.PI / 2;
-    return `<g transform="translate(${Math.cos(a) * 130} ${Math.sin(a) * 130})"><circle r="7" fill="#000" stroke="#ccff00"/><text y="-14" text-anchor="middle" fill="#71717a" font-family="JetBrains Mono" font-size="10">0${i + 1}</text></g>`;
+    return `<g transform="translate(${Math.cos(a) * 130} ${Math.sin(a) * 130})"><circle r="7" style="fill:var(--void);stroke:var(--acid)"/><text y="-14" text-anchor="middle" style="fill:var(--text-3)" font-family="JetBrains Mono" font-size="10">0${i + 1}</text></g>`;
   }).join("");
   if (!gsap || reduced) return;
   const svg = document.querySelector("#core svg");
@@ -74,6 +75,11 @@ function initPipeline() {
       onUpdate: (st) => setActive(st.progress) },
   }).to(".how-fill", { attr: { "stroke-dashoffset": 0 }, ease: "none" });
 
+  // Section headings reveal word by word as they scroll in.
+  gsap.utils.toArray(".cta h2, .feat h3").forEach((h) => {
+    gsap.from(splitWords(h), { yPercent: 110, stagger: 0.05, duration: 0.9, scrollTrigger: { trigger: h, start: "top 88%" } });
+  });
+
   gsap.utils.toArray(".feat").forEach((el, i) => {
     gsap.from(el, { y: 40, opacity: 0, delay: (i % 3) * 0.08, scrollTrigger: { trigger: el, start: "top 85%" } });
   });
@@ -94,8 +100,8 @@ async function initStats() {
 
 async function initSessionCta() {
   try {
-    const res = await fetch("/api/auth/me", { credentials: "same-origin" });
-    if (!res.ok) return;
+    const res = await fetch("/api/auth/session", { credentials: "same-origin" });
+    if (!res.ok || !(await res.json()).signed_in) return;
     for (const id of ["navCta", "heroSignin"]) {
       const el = document.getElementById(id);
       el.textContent = "Open console";
@@ -109,6 +115,7 @@ document.querySelectorAll("a[data-leave], #navCta").forEach((a) => a.addEventLis
   leave(a.getAttribute("href"));
 }));
 
+document.querySelectorAll("[data-theme-toggle]").forEach(mountThemeToggle);
 initFog();
 initCore();
 initIntro();

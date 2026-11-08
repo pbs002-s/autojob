@@ -7,12 +7,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>try{var t=localStorage.getItem("aj-theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="stylesheet" href="/assets/shared/tokens.css">
   <style>
     body { min-height: 100svh; display: grid; grid-template-rows: auto 1fr; }
     header { display: flex; justify-content: space-between; align-items: center; height: 64px; padding: 0 clamp(16px, 4vw, 48px); border-bottom: 1px solid var(--line); }
     .brand { display: flex; align-items: center; gap: 10px; font: 600 14px/1 var(--font-mono); letter-spacing: .2em; text-decoration: none; }
-    .brand-mark { width: 12px; height: 12px; background: var(--acid); transform: rotate(45deg); }
+    .brand-mark { width: 12px; height: 12px; background: var(--acid-fill); box-shadow: 0 0 0 1px var(--acid); transform: rotate(45deg); }
     main { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: clamp(24px, 6vw, 96px); align-items: center; padding: 48px clamp(16px, 4vw, 48px); max-width: 1200px; width: 100%; margin: 0 auto; }
     h1 { margin: 0 0 8px; font-size: 44px; letter-spacing: -.04em; line-height: 1; }
     form { display: grid; gap: 16px; margin-top: 32px; }
@@ -33,7 +34,7 @@
 <body class="noise backdrop">
   <header>
     <a class="brand" href="/"><span class="brand-mark"></span>AUTOJOB</a>
-    <a class="btn btn-sm" href="/"><svg class="icon" aria-hidden="true"><use href="/assets/shared/sprite.svg#i-back"/></svg>Back to site</a>
+    <span style="display:flex;gap:8px"><button class="btn btn-sm theme-btn" data-theme-toggle type="button"></button><a class="btn btn-sm" href="/"><svg class="icon" aria-hidden="true"><use href="/assets/shared/sprite.svg#i-back"/></svg>Back to site</a></span>
   </header>
   <main>
     <section class="panel" style="padding: clamp(24px, 4vw, 40px)" aria-labelledby="signin-title">

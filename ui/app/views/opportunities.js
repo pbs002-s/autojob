@@ -1,9 +1,31 @@
-import { api, esc, icon, safeUrl, toast } from "/assets/shared/api.js";
-import { gsap, reduced } from "/assets/shared/motion.js";
+import { api, clearToasts, esc, icon, safeUrl, toast } from "/assets/shared/api.js";
+import { gsap, reduced, typeText } from "/assets/shared/motion.js";
 
 const FILTERS = [["all", "All"], ["high", "≥70%"], ["discovered", "New"], ["applied", "Applied"]];
 const TONES = ["standard", "concise", "technical", "friendly"];
-const state = { jobs: [], filter: "all", q: "", platform: "all", selected: null, proposal: "", tone: "standard" };
+const state = { jobs: [], filter: "all", q: "", platform: "all", selected: null, proposal: "", tone: "standard", email: { configured: false, simulated: false } };
+const STEPS = ["Draft", "Send", "Applied"];
+const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i;
+const narrow = () => window.matchMedia("(max-width: 1100px)").matches;
+
+function stepsHtml(j) {
+  const at = j.status === "applied" ? 3 : state.proposal ? 2 : 1;
+  return `<ol class="steps" aria-label="Application progress">${STEPS.map((s, i) => `
+    <li class="${i + 1 < at ? "done" : i + 1 === at ? "now" : ""}" ${i + 1 === at ? 'aria-current="step"' : ""}><span class="mono">0${i + 1}</span>${s}</li>`).join("")}</ol>`;
+}
+
+function emailHtml(j) {
+  if (!state.email.configured) {
+    return `<p class="hint">${icon("mail")}<span>Email is not set up. Add <code>SMTP_HOST</code>, <code>SMTP_USER</code> and <code>SMTP_PASSWORD</code> to <code>.env</code>, then restart.</span></p>`;
+  }
+  return `<form id="mailForm" class="mail-form" novalidate>
+      <div class="field"><label class="label" for="mailTo">Recruiter email</label>
+        <input class="input" id="mailTo" name="mailTo" type="email" required maxlength="254" placeholder="hiring@company.com" autocomplete="off"></div>
+      <div class="field"><label class="label" for="mailSubj">Subject</label>
+        <input class="input" id="mailSubj" name="mailSubj" required maxlength="200" value="${esc(`Application: ${j.title}`)}"></div>
+      <button class="btn btn-sm btn-primary" type="submit">${icon("mail")}${state.email.simulated ? "Send (demo)" : "Send email"} &amp; mark applied</button>
+    </form>`;
+}
 
 const scoreClass = (s) => (s >= 70 ? "hi" : s < 45 ? "lo" : "");
 
@@ -35,7 +57,10 @@ function renderDetail(el, ctx) {
   const j = state.selected;
   if (!j) { box.innerHTML = `<div class="empty">Select a role to draft a proposal.</div>`; return; }
   const canRun = ctx.can("jobs:run");
+  const canApply = ctx.can("applications:write") && j.status !== "applied";
   box.innerHTML = `
+    <button class="btn btn-sm back-list" id="backList" type="button">${icon("back")}Back to list</button>
+    ${canRun ? stepsHtml(j) : ""}
     <div class="card-h" style="align-items:flex-start"><div>
       <p class="label" style="margin:0 0 6px">${esc(j.platform)} · ${esc(j.budget_or_salary || "Budget n/a")}</p>
       <h2 style="font-size:20px">${esc(j.title)}</h2><p class="muted" style="margin:4px 0 0">${esc(j.company)} · ${esc(j.location || "Remote")}</p></div>
@@ -43,19 +68,25 @@ function renderDetail(el, ctx) {
     <div class="tags">${j.tags.slice(0, 10).map((t) => `<span class="chip">${esc(t)}</span>`).join("")}</div>
     <div class="row" style="margin:16px 0">
       <a class="btn btn-sm" href="${safeUrl(j.url)}" target="_blank" rel="noopener noreferrer">${icon("globe")}Open posting</a>
-      ${canRun ? `<div class="toggle" role="group" aria-label="Tone">${TONES.map((t) => `<button data-tone="${t}" aria-pressed="${state.tone === t}">${t}</button>`).join("")}</div>
+      ${canRun && j.status !== "applied" ? `<div class="toggle" role="group" aria-label="Tone">${TONES.map((t) => `<button data-tone="${t}" aria-pressed="${state.tone === t}">${t}</button>`).join("")}</div>
       <button class="btn btn-sm btn-primary" id="gen">${icon("bolt")}${state.proposal ? "Regenerate" : "Draft proposal"}</button>` : ""}
     </div>
-    ${state.proposal ? `<div class="proposal" id="prop">${esc(state.proposal)}</div>
-      <div class="row" style="margin-top:12px">
+    ${state.proposal ? `<label class="sr-only" for="prop">Proposal (editable)</label>
+      <textarea class="proposal textarea" id="prop" rows="12">${esc(state.proposal)}</textarea>
+      <p class="hint">Edit freely before sending.</p>
+      <div class="row" style="margin-top:8px">
         <button class="btn btn-sm" id="copy">${icon("copy")}Copy</button>
-        ${ctx.can("browser:prefill") ? `<button class="btn btn-sm" id="prefill">${icon("globe")}Pre-fill in browser</button>` : ""}
-        ${ctx.can("applications:write") && j.status !== "applied" ? `<button class="btn btn-sm btn-primary" id="apply">${icon("check")}Mark applied</button>` : ""}
-      </div>` : canRun ? "" : `<p class="muted">Your role can browse roles but not draft proposals.</p>`}`;
+        ${ctx.can("browser:prefill") ? `<button class="btn btn-sm" id="prefill" title="Opens the job page and fills the form. You review and press submit yourself.">${icon("globe")}Pre-fill in browser</button>` : ""}
+        ${canApply ? `<button class="btn btn-sm" id="apply">${icon("check")}Mark applied</button>` : ""}
+      </div>
+      ${canApply ? `<div class="send-box"><p class="label">Apply by email</p>${emailHtml(j)}</div>` : ""}`
+    : j.status === "applied" ? `<p class="hint">${icon("check")}<span>Already applied.</span></p>`
+    : canRun ? `<p class="hint">Pick a tone, then press <strong>Draft proposal</strong>.</p>` : `<p class="muted">Your role can browse roles but not draft proposals.</p>`}`;
   bindDetail(el, ctx);
 }
 
 async function withBusy(btn, label, fn) {
+  clearToasts();
   const html = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = `<span class="spinner"></span>${label}`;
@@ -69,8 +100,10 @@ function bindDetail(el, ctx) {
     const res = await api("/api/proposals/generate", { method: "POST", body: { job_id: j.id, tone: state.tone } });
     state.proposal = res.proposal_text;
     renderDetail(el, ctx);
-    if (gsap && !reduced) gsap.from("#prop", { opacity: 0, y: 8, duration: 0.3 });
+    typeText(el.querySelector("#prop"), state.proposal);
   }));
+  el.querySelector("#prop")?.addEventListener("input", (e) => { state.proposal = e.target.value; });
+  el.querySelector("#backList")?.addEventListener("click", () => el.querySelector("#jobList").scrollIntoView({ behavior: reduced ? "auto" : "smooth" }));
   el.querySelector("#copy")?.addEventListener("click", async () => {
     try { await navigator.clipboard.writeText(state.proposal); toast("Proposal copied."); }
     catch { toast("Clipboard blocked by the browser.", "error"); }
@@ -83,10 +116,28 @@ function bindDetail(el, ctx) {
     await api("/api/proposals/apply", { method: "POST", body: { job_id: j.id, proposal_text: state.proposal } });
     state.jobs = state.jobs.map((x) => (x.id === j.id ? { ...x, status: "applied" } : x));
     state.selected = { ...j, status: "applied" };
+    markApplied(el, ctx, j);
     toast("Application recorded.");
-    renderList(el);
-    renderDetail(el, ctx);
   }));
+  el.querySelector("#mailForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = e.currentTarget;
+    const to = f.mailTo.value.trim();
+    f.mailTo.setAttribute("aria-invalid", String(!EMAIL_RE.test(to)));
+    if (!EMAIL_RE.test(to)) { clearToasts(); toast("Enter a valid recruiter email address.", "error"); f.mailTo.focus(); return; }
+    withBusy(f.querySelector("button"), "Sending", async () => {
+      const res = await api("/api/email/send", { method: "POST", body: { to, subject: f.mailSubj.value.trim() || `Application: ${j.title}`, body: state.proposal, job_id: j.id } });
+      markApplied(el, ctx, j);
+      toast(res.status === "simulated" ? `Demo: email to ${to} simulated, application recorded.` : `Email sent to ${to}. Application recorded.`);
+    });
+  });
+}
+
+function markApplied(el, ctx, j) {
+  state.jobs = state.jobs.map((x) => (x.id === j.id ? { ...x, status: "applied" } : x));
+  state.selected = { ...j, status: "applied" };
+  renderList(el);
+  renderDetail(el, ctx);
 }
 
 function exportCsv() {
@@ -100,7 +151,8 @@ function exportCsv() {
 
 export default {
   async render(el, ctx) {
-    state.jobs = await api("/api/jobs");
+    const [jobs, email] = await Promise.all([api("/api/jobs"), api("/api/email/status").catch(() => ({ configured: false }))]);
+    state.jobs = jobs; state.email = email;
     state.selected = null; state.proposal = "";
     const platforms = [...new Set(state.jobs.map((j) => j.platform))];
     el.innerHTML = `
@@ -120,7 +172,7 @@ export default {
       <div class="split">
         <section class="card" style="padding:0"><div class="card-h" style="padding:16px 16px 0"><h2>Roles</h2><span class="label" id="jobCount"></span></div>
           <div id="jobList" role="listbox" aria-label="Roles" style="max-height:70vh;overflow:auto"></div></section>
-        <section class="card" id="detail" style="position:sticky;top:80px"></section>
+        <section class="card detail" id="detail"></section>
       </div>`;
     renderList(el);
     renderDetail(el, ctx);
@@ -139,6 +191,7 @@ export default {
       state.proposal = "";
       el.querySelectorAll(".job").forEach((x) => x.setAttribute("aria-selected", String(x === btn)));
       renderDetail(el, ctx);
+      if (narrow()) el.querySelector("#detail").scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
     });
     el.querySelector("#csv").addEventListener("click", exportCsv);
     el.querySelector("#scout")?.addEventListener("click", (e) => withBusy(e.currentTarget, "Scouting", async () => {

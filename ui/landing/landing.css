@@ -1,10 +1,10 @@
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; gap: 24px;
   height: 64px; padding: 0 clamp(16px, 4vw, 48px);
-  background: rgba(0, 0, 0, .55); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+  background: var(--glass); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: 10px; font: 600 14px/1 var(--font-mono); letter-spacing: .2em; text-decoration: none; }
-.brand-mark { width: 12px; height: 12px; background: var(--acid); transform: rotate(45deg); }
+.brand-mark { width: 12px; height: 12px; background: var(--acid-fill); box-shadow: 0 0 0 1px var(--acid); transform: rotate(45deg); }
 .nav nav { display: flex; gap: 24px; margin-left: auto; }
 .nav nav a { font: 12px var(--font-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--text-2); text-decoration: none; }
 .nav nav a:hover { color: var(--acid); }
@@ -28,7 +28,7 @@
 .r1 { animation: spin 60s linear infinite; }
 .r2 { animation: spin 40s linear infinite reverse; }
 .r3 { animation: spin 24s linear infinite; }
-.float-card { position: absolute; right: -4%; bottom: -2%; padding: 14px 16px; min-width: 220px; background: rgba(10,10,10,.8); backdrop-filter: blur(8px); }
+.float-card { position: absolute; right: -4%; bottom: -2%; padding: 14px 16px; min-width: 220px; background: var(--glass); backdrop-filter: blur(8px); }
 .float-card p { margin: 0; }
 .float-title { margin-top: 8px !important; font-weight: 600; }
 .float-meta { font-size: 12px; margin-top: 2px !important; }
@@ -49,7 +49,7 @@
 .how-head h2 { margin: 12px 0 0; font-size: clamp(40px, 5.5vw, 80px); line-height: .95; letter-spacing: -.04em; }
 .how-track { position: absolute; left: 0; top: 0; width: 8px; height: 100%; }
 .phases { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
-.phase { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 22px 20px; border: 1px solid var(--line); background: var(--panel); opacity: .35; transition: opacity .3s, border-color .3s; }
+.phase { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 22px 20px; border: 1px solid var(--line); background: var(--panel); opacity: .5; transition: opacity .3s, border-color .3s; }
 .phase.on { opacity: 1; border-color: var(--acid); }
 .phase-n { font-size: 13px; color: var(--acid); padding-top: 5px; }
 .phase h3 { margin: 0 0 4px; font-size: 22px; letter-spacing: -.02em; }
@@ -63,7 +63,7 @@
 .feat h3 { margin: 0; font-size: 26px; letter-spacing: -.03em; line-height: 1.1; }
 .feat p { margin: 0; }
 .feat-wide { grid-column: span 2; }
-.feat-acid { background: var(--acid); color: #000; border-color: var(--acid); }
+.feat-acid { background: var(--acid-fill); color: var(--on-acid); border-color: var(--acid-fill); }
 .feat-acid .label { color: rgba(0,0,0,.6); }
 .feat .big { font-size: 72px; letter-spacing: -.05em; }
 
