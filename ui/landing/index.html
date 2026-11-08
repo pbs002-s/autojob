@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoJob AI</title>
+  <meta name="description" content="Autonomous job scouting, proposal drafting and client retention, with a human in the loop.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/shared/tokens.css">
+  <link rel="stylesheet" href="/assets/landing/landing.css">
+</head>
+<body class="noise">
+  <header class="nav">
+    <a class="brand" href="/" aria-label="AutoJob home"><span class="brand-mark"></span>AUTOJOB</a>
+    <nav aria-label="Sections">
+      <a href="#how">Pipeline</a>
+      <a href="#features">System</a>
+      <a href="#stats">Live</a>
+    </nav>
+    <a class="btn btn-sm" id="navCta" href="/login">Sign in</a>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <canvas id="fog" aria-hidden="true"></canvas>
+      <div class="hero-copy">
+        <p class="label hero-kicker"><span class="dot pulse acid"></span> Runtime v2 // autonomous workforce engine</p>
+        <h1 id="hero-title" class="hero-title">Your remote pipeline, <em>running while you ship.</em></h1>
+        <p class="hero-sub">AutoJob scouts five remote feeds, scores every role against your dossier, drafts the proposal and holds the client in under a minute. You approve. It does the rest.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="/login#demo" data-leave>Try the live demo <span class="arrow">→</span></a>
+          <a class="btn" href="/login" data-leave id="heroSignin">Sign in</a>
+        </div>
+      </div>
+      <div class="hero-visual" id="core" aria-hidden="true">
+        <svg viewBox="-200 -200 400 400">
+          <defs>
+            <radialGradient id="glow"><stop offset="0" stop-color="#ccff00" stop-opacity=".35"/><stop offset="1" stop-color="#ccff00" stop-opacity="0"/></radialGradient>
+          </defs>
+          <circle r="190" fill="url(#glow)"/>
+          <g class="ring r1"><circle r="170" fill="none" stroke="#333" stroke-dasharray="2 8"/></g>
+          <g class="ring r2"><circle r="130" fill="none" stroke="#444" stroke-dasharray="40 12"/></g>
+          <g class="ring r3"><circle r="90" fill="none" stroke="#ccff00" stroke-opacity=".5" stroke-dasharray="4 4"/></g>
+          <g class="nodes"></g>
+          <rect x="-34" y="-34" width="68" height="68" fill="#000" stroke="#ccff00" transform="rotate(45)"/>
+          <text y="5" text-anchor="middle" fill="#ccff00" font-family="JetBrains Mono" font-size="13">AJ</text>
+        </svg>
+        <div class="float-card panel">
+          <p class="label">Now drafting</p>
+          <p class="float-title">Senior Full-Stack Engineer</p>
+          <p class="mono muted float-meta">match 92.4% · RemoteOK</p>
+        </div>
+      </div>
+    </section>
+
+    <svg class="divider" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60V30h360l40-30h640l40 30h360v30z" fill="#0a0a0a"/></svg>
+
+    <section class="stats" id="stats" aria-label="Live numbers">
+      <div class="stat"><span class="stat-n" data-key="jobs_scanned">—</span><span class="label">roles scanned</span></div>
+      <div class="stat"><span class="stat-n acid" data-key="high_matches">—</span><span class="label">high matches ≥70%</span></div>
+      <div class="stat"><span class="stat-n" data-key="applications">—</span><span class="label">applications sent</span></div>
+      <div class="stat"><span class="stat-n" data-key="conversations">—</span><span class="label">clients held</span></div>
+    </section>
+
+    <section class="how" id="how" aria-labelledby="how-title">
+      <div class="how-pin">
+        <div class="how-head">
+          <p class="label">The pipeline</p>
+          <h2 id="how-title">Five phases.<br>One loop.</h2>
+          <svg class="how-track" viewBox="0 0 8 400" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="4" y1="0" x2="4" y2="400" stroke="#222" stroke-width="2"/>
+            <line class="how-fill" x1="4" y1="0" x2="4" y2="400" stroke="#ccff00" stroke-width="2"/>
+          </svg>
+        </div>
+        <ol class="phases">
+          <li class="phase"><span class="phase-n mono">01</span><div><h3>Scout</h3><p>RemoteOK, Remotive, Jobicy, WeWorkRemotely and HN hiring threads, polled and deduplicated.</p></div></li>
+          <li class="phase"><span class="phase-n mono">02</span><div><h3>Score</h3><p>Every role weighed against your skills, rate floor and role targets. Noise drops out.</p></div></li>
+          <li class="phase"><span class="phase-n mono">03</span><div><h3>Draft</h3><p>A tailored proposal citing your most relevant case studies, in the tone you pick.</p></div></li>
+          <li class="phase"><span class="phase-n mono">04</span><div><h3>Pre-fill</h3><p>A persistent browser fills the form. It stops before submit. You hit the button.</p></div></li>
+          <li class="phase"><span class="phase-n mono">05</span><div><h3>Hold</h3><p>Inbound replies answered in seconds with a booking link. Anything risky escalates to you.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="features" id="features" aria-labelledby="feat-title">
+      <h2 id="feat-title" class="sr-only">System</h2>
+      <article class="feat feat-wide panel">
+        <p class="label">Human in the loop</p>
+        <h3>Nothing submits without you.</h3>
+        <p class="muted">Browser automation stages the form and pauses. CAPTCHA or 2FA? It hands control back instead of guessing.</p>
+      </article>
+      <article class="feat panel">
+        <p class="label">Roles</p>
+        <h3>Admin · Operator · Viewer</h3>
+        <p class="muted">Share the console without sharing the keys. The server enforces every permission.</p>
+      </article>
+      <article class="feat panel feat-acid">
+        <p class="label">Latency</p>
+        <h3 class="big mono">&lt;90s</h3>
+        <p>first reply to inbound clients</p>
+      </article>
+      <article class="feat feat-wide panel">
+        <p class="label">Offline-safe</p>
+        <h3>Works without an API key.</h3>
+        <p class="muted">No Gemini key? Proposals and replies fall back to your own templates. Your dossier never leaves your machine.</p>
+      </article>
+    </section>
+
+    <section class="cta" aria-labelledby="cta-title">
+      <h2 id="cta-title">See it run on sample data.</h2>
+      <p class="muted">The demo uses a sandboxed copy. Nothing real is touched; it resets every 30 minutes.</p>
+      <a class="btn btn-primary" href="/login#demo" data-leave>Open the demo <span class="arrow">→</span></a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="mono">AUTOJOB AI</span>
+    <span class="muted">Built for engineers who would rather be shipping.</span>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+  <script type="module" src="/assets/landing/landing.js"></script>
+</body>
+</html>

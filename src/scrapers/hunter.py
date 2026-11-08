@@ -11,9 +11,9 @@ from src.db import Database
 class JobHunter:
     """Multi-source remote, contract, and freelance opportunity hunter across 5 high-yield feeds."""
 
-    def __init__(self):
-        self.proposal_agent = ProposalAgent()
-        self.db = Database()
+    def __init__(self, db: Database = None, proposal_agent: ProposalAgent = None):
+        self.proposal_agent = proposal_agent or ProposalAgent()
+        self.db = db or Database()
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
             "Accept": "application/json, text/xml, application/xml"

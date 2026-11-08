@@ -86,6 +86,25 @@ python main.py --mode scout
 python main.py --mode responder
 ```
 
+### 5. Web console (landing page + dashboard)
+
+Add to `.env` before the first start (the server refuses to start without an admin):
+
+```bash
+AUTOJOB_ADMIN_EMAIL=you@example.com
+AUTOJOB_ADMIN_PASSWORD=at-least-10-chars
+AUTOJOB_DEMO=1   # optional: enables "Try the demo" with a sandboxed, resettable dataset
+```
+
+```bash
+python main.py --mode ui        # http://127.0.0.1:8000
+```
+
+- `/` landing page, `/login` sign in (and demo cards), `/app/*` dashboard.
+- Roles: **admin** (everything, incl. dossier edits, console, users), **operator** (run agent, draft, pre-fill, record applications), **viewer** (read-only). Enforced server-side in `src/auth/rbac.py`.
+- Demo sessions use `data/demo.db` + `data/demo_profile.json`, never call Gemini, never launch a browser, and reset every 30 minutes.
+- Tests: `python -m pytest tests -q`
+
 ---
 
 ## ⚠️ Important Operating Principles
